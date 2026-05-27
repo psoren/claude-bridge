@@ -91,3 +91,16 @@ Tail the log to confirm: `tail -f /tmp/claude-bridge.err.log` should show `claud
 ## Threat model
 
 The daemon binds to `127.0.0.1` only. Anyone with shell access on the mini can hit it; anyone with SSH access on the mini (you, via your Tailnet key) can hit it via the SSH tunnel. There is no auth on the endpoint itself — the security boundary is "can SSH into the mini." If you want belt-and-braces, add a shared-secret header check in `server.py`.
+
+## Related projects
+
+These both predate this one and have overlapping goals. I learned about them *after* building this — so this section exists for intellectual honesty, not as a "compare and contrast." They're all valid; pick whichever fits your shape best.
+
+- **[willjackson/claude-code-bridge](https://github.com/willjackson/claude-code-bridge)** — same name as this one (whoops). Extends Claude Code to remote machines via WebSocket with TLS, tokens, and auth. More elaborate than ours and supports file operations as well as prompt delegation.
+- **[rohitg00/tailclaude](https://github.com/rohitg00/tailclaude)** — Claude Code on your Tailnet, powered by the "iii engine." Tailscale-specific, so it's the closest geographic match to this setup.
+
+I still think this one is worth having around for three reasons:
+
+- **Minimal architecture.** ~70 lines of Python, no protocol, no client library, no auth tokens. Easy to read end-to-end and easy to audit.
+- **OAuth-subscription-aware.** Works with your Claude Code Max subscription on the always-on machine instead of forcing an `ANTHROPIC_API_KEY` (which would bill at API rates).
+- **Sidesteps Keychain instead of solving it.** The common fix is to configure SSH to unlock the login keychain on connect. This one avoids the problem by never having SSH invoke `claude` at all — a daemon born in the GUI session does the OAuth read, and SSH just curls loopback.
