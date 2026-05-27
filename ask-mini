@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# Ask the mini's Claude a question; print its response.
+#
+#   ./ask-mini "what is in ~/projects on this host?"
+#   echo "summarize the file at ~/notes.md" | ./ask-mini -
+#
+# Requires: the bridge daemon running on the mini at 127.0.0.1:9100.
+# Auth: SSH key (see ../README.md).
+set -euo pipefail
+
+HOST="${MINI_HOST:-parkers-mac-mini}"
+PORT="${MINI_BRIDGE_PORT:-9100}"
+
+if [ "$#" -lt 1 ]; then
+  echo "usage: ask-mini \"<prompt>\"     # or echo prompt | ask-mini -" >&2
+  exit 2
+fi
+
+if [ "$1" = "-" ]; then
+  PROMPT="$(cat)"
+else
+  PROMPT="$*"
+fi
+
+ssh "$HOST" "curl -sS --max-time 310 -X POST --data-binary @- http://127.0.0.1:${PORT}/ask" <<< "$PROMPT"
