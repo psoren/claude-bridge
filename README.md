@@ -57,7 +57,7 @@ Drop at `~/Library/LaunchAgents/com.parker.claude-bridge.plist` on the mini:
   <key>ProgramArguments</key>
   <array>
     <string>/usr/bin/python3</string>
-    <string>/Users/parker/github/parker-site-registry/bridge/server.py</string>
+    <string>/Users/parker/github/claude-bridge/server.py</string>
   </array>
   <key>EnvironmentVariables</key>
   <dict>
