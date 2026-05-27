@@ -1,5 +1,7 @@
 # bridge — MBP-Claude ↔ Mini-Claude IPC
 
+![Cross-section pixel-art of a house at night: laptop on the desk downstairs glows, a thin gold thread snakes up through the floor to a sleeping bedroom upstairs](./hero.png)
+
 A 70-line Python HTTP server on the mini, plus a one-liner CLI on the MBP. Lets a Claude session on the laptop delegate a prompt to a Claude session on the mini and get the response back.
 
 ## Why
