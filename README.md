@@ -101,8 +101,7 @@ These both predate this one and have overlapping goals. I learned about them *af
 - **[willjackson/claude-code-bridge](https://github.com/willjackson/claude-code-bridge)** — same name as this one (whoops). Extends Claude Code to remote machines via WebSocket with TLS, tokens, and auth. More elaborate than ours and supports file operations as well as prompt delegation.
 - **[rohitg00/tailclaude](https://github.com/rohitg00/tailclaude)** — Claude Code on your Tailnet, powered by the "iii engine." Tailscale-specific, so it's the closest geographic match to this setup.
 
-I still think this one is worth having around for three reasons:
+I still think this one is worth having around for two reasons:
 
-- **Minimal architecture.** ~70 lines of Python, no protocol, no client library, no auth tokens. Easy to read end-to-end and easy to audit.
-- **OAuth-subscription-aware.** Works with your Claude Code Max subscription on the always-on machine instead of forcing an `ANTHROPIC_API_KEY` (which would bill at API rates).
-- **Sidesteps Keychain instead of solving it.** The common fix is to configure SSH to unlock the login keychain on connect. This one avoids the problem by never having SSH invoke `claude` at all — a daemon born in the GUI session does the OAuth read, and SSH just curls loopback.
+- **Minimal architecture.** ~70 lines of Python, no protocol, no client library, no auth tokens, no external dependencies (just `http.server` + `subprocess`). Easy to read end-to-end and easy to audit in one sitting.
+- **Sidesteps Keychain instead of solving it.** The common fix to the SSH-can't-read-OAuth-token problem is to configure SSH to unlock the login keychain on connect. This one avoids the problem by never having SSH invoke `claude` at all — a daemon born in the GUI session does the OAuth read, and SSH just curls loopback. (The other CLI-wrapping projects above all also inherit Claude Code's OAuth auth, so that's not a distinguishing claim — that's table stakes for any project that spawns `claude -p`.)
